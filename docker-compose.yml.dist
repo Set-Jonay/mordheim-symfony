@@ -1,0 +1,55 @@
+version: '3'
+
+services:
+  mordheim-web:
+    container_name: mordheim-web
+    build:
+      context: ./docker/apache
+    ports:
+      - 80:80
+    volumes:
+      - ./docker/apache/conf:/etc/apache2/sites-enabled
+      - .:/appdata/wwwroot/:cached 
+    depends_on:
+      - mordheim-php
+    networks:
+      - mordheim-network
+
+  mordheim-php:
+    container_name: mordheim-php
+    build:
+      context: ./docker/php
+    #environment:
+      #PHP_IDE_CONFIG: serverName=Docker
+      #PHP_XDEBUG_ENABLED: 1
+      #XDEBUG_CONFIG: remote_host=172.17.0.1 remote_port=9005 # Linux users
+      #XDEBUG_CONFIG: remote_host=host.docker.internal remote_port=9005 # MacOS users
+    volumes:
+      - ./:/appdata/wwwroot
+      #- ./docker/php/xdebug-linux.ini:/usr/local/etc/php/conf.d/xdebug.ini
+      #- ./docker/php/xdebug-mac.ini:/usr/local/etc/php/conf.d/xdebug.ini
+    depends_on:
+      - mordheim-db
+    networks:
+      - mordheim-network
+
+  mordheim-db:
+    container_name: mordheim-db
+    image: postgres:10.17
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_DB: mordheim
+      POSTGRES_USER: mordheim
+      POSTGRES_PASSWORD: mordheim
+    volumes:
+      - mordheim-db-data:/var/lib/postgresql/data
+    networks:
+      - mordheim-network
+
+volumes:
+  mordheim-db-data:
+
+networks:
+  mordheim-network:
+    external: true
