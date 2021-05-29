@@ -1,12 +1,14 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <div class="container">
-        <div class="centered">
-            <h1>Mordheim!</h1>
-            <br>
-            <a href="heroes" class="btn btn-warning" role="button">Héroes</a>
-            <a href="minions" class="btn btn-warning" role="button">Secuaces</a>
+    <div class="row justify-content-md-center">
+        <h1>Mordheim!</h1>
+    </div>
+    <br>
+    <div class="row justify-content-md-center">
+        <div class="col ">
+            <a href="heroes" class="btn btn-info" role="button">Héroes</a>
+            <a href="minions" class="btn btn-primary btn-block" role="button">Secuaces</a>
         </div>
     </div>
 {% endblock %}
